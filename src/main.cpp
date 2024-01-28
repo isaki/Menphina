@@ -4,7 +4,7 @@
 #include <string_view>
 
 #include "boost/program_options.hpp"
-#include "internal/config.hpp"
+#include "menphina_internal/config.hpp"
 #include "menphina/util.hpp"
 #include "menphina/execution.hpp"
 
