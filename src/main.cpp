@@ -1,3 +1,5 @@
+/* Copyright 2024 isaki */
+
 #include <iostream>
 #include <filesystem>
 #include <string>

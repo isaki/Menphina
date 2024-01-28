@@ -1,3 +1,5 @@
+/* Copyright 2024 isaki */
+
 #ifndef __MENPHINA_UTIL_HPP__
 #define __MENPHINA_UTIL_HPP__
 

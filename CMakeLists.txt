@@ -1,3 +1,5 @@
+# Copyright 2024 isaki
+
 cmake_minimum_required(VERSION 3.28)
 
 project(

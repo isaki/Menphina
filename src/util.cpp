@@ -1,3 +1,5 @@
+/* Copyright 2024 isaki */
+
 #include "menphina/util.hpp"
 
 namespace menphina

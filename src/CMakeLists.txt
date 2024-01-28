@@ -1,3 +1,5 @@
+# Copyright 2024 isaki
+
 find_package(Boost 1.74.0 REQUIRED COMPONENTS program_options)
 
 add_executable(xiv-menphina
