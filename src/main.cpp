@@ -61,15 +61,16 @@ int main(int argc, char ** argv)
 
             std::cout << std::endl
                 << "  clean" << std::endl
-                << "\tanalyzes and cleans orphaned data from the Penumbra configuration directory" << std::endl;
+                << "    analyzes and cleans orphaned data from the Penumbra configuration" << std::endl
+                << "    directory" << std::endl;
 
             std::cout << std::endl
                 << "  package" << std::endl
-                << "\tpackages all configured mod data into a deployment package (xmpkg)" << std::endl;
+                << "    packages all configured mod data into a deployment package (xmpkg)" << std::endl;
 
             std::cout << std::endl
                 << "  deploy" << std::endl
-                << "\tdeploys all configured (if present) mod data from a deployment package (xmpkg)" << std::endl;
+                << "    deploys all configured (if present) mod data from a deployment package" << std::endl;
 
             std::cout << std::endl;
 
