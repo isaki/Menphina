@@ -13,7 +13,7 @@ namespace menphina
         public:
             virtual ~Execution() {}
 
-            virtual int run(const AppConfig& config) noexcept = 0;
+            virtual int run(const struct app_config_s& config) noexcept = 0;
         protected:
             Execution() {}
     };

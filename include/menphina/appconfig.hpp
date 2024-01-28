@@ -3,16 +3,18 @@
 #ifndef __MENPHINA_APP_CONFIG_HPP__
 #define __MENPHINA_APP_CONFIG_HPP__
 
-#include <fstream>
-#include "nlohmann/json.hpp"
+#include <string>
+#include <ostream>
 
 namespace menphina
 {
-    class AppConfig final
+    struct app_config_s
     {
-        AppConfig();
-        ~AppConfig();
+        std::string penumbraDir;
+        std::string xivLauncherConfigDir;
     };
+
+    std::ostream& operator<<(std::ostream& os, const struct app_config_s& ac);
 }
 
 #endif

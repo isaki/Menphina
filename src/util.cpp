@@ -17,34 +17,30 @@ namespace
 #endif
 }
 
-namespace menphina
+std::string menphina::path_basename(const std::string_view& pathstr)
 {
-
-    std::string path_basename(const std::string_view& pathstr)
-    {
-        const std::filesystem::path p(pathstr);
-        return p.filename().u8string();
-    }
-
-    std::string get_user_home_directory()
-    {
-        // Documentation for getpwnam/getpwuid say to use HOME, so we use that.
-        const char * home = std::getenv(HOME_VAR_NAME.c_str());
-
-        if (home == nullptr)
-        {
-            return {};
-        }
-
-        std::string ret { home };
-        return ret;
-    }
-
-    std::string path_join(const std::string& a, const std::string& b)
-    {
-        std::filesystem::path ret(a);
-        ret /= b;
-        return ret;
-    }
-
+    const std::filesystem::path p(pathstr);
+    return p.filename().string();
 }
+
+std::string menphina::get_user_home_directory()
+{
+    // Documentation for getpwnam/getpwuid say to use HOME, so we use that.
+    const char * home = std::getenv(HOME_VAR_NAME.c_str());
+
+    if (home == nullptr)
+    {
+        return {};
+    }
+
+    std::string ret { home };
+    return ret;
+}
+
+std::string menphina::path_join(const std::string& a, const std::string& b)
+{
+    std::filesystem::path ret(a);
+    ret /= b;
+    return ret;
+}
+

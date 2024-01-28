@@ -5,6 +5,7 @@
 
 #include <string>
 #include <string_view>
+#include "glaze/exceptions/json_exceptions.hpp"
 
 namespace menphina
 {
@@ -13,6 +14,12 @@ namespace menphina
     std::string get_user_home_directory();
 
     std::string path_join(const std::string& a, const std::string& b);
+
+    template<typename T>
+    inline void read_json_file(T& obj, const std::string& filename)
+    {
+        glz::ex::read_file_json(obj, filename, std::string {});
+    }
 }
 
 #endif

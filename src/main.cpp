@@ -7,6 +7,7 @@
 
 #include "boost/program_options.hpp"
 #include "menphina_internal/config.hpp"
+#include "menphina/appconfig.hpp"
 #include "menphina/util.hpp"
 #include "menphina/execution.hpp"
 
@@ -137,6 +138,11 @@ int main(int argc, char ** argv)
 
     const std::string configFile = _get_config_file();
     std::cout << "Loading configuration from " << configFile << std::endl;
+
+    struct menphina::app_config_s appConfig;
+    menphina::read_json_file<struct menphina::app_config_s>(appConfig, configFile);
+
+    std::cout << "Menphina configuration:" << appConfig;
 
     return 0;
 }
