@@ -14,16 +14,22 @@ namespace po = boost::program_options;
 
 namespace
 {
-    const std::string MODE_CLEAN("clean");
-    const std::string MODE_PACKAGE("package");
-    const std::string MODE_DEPLOY("deploy");
+    const std::string MODE_CLEAN { "clean" };
+    const std::string MODE_PACKAGE { "package" };
+    const std::string MODE_DEPLOY { "deploy" };
 
-    //const std::string CONFIG_NAME(".menphina");
+    const std::string CONFIG_NAME { ".menphina.json" };
 
-    inline std::string _argv_basename(const char * name)
+    std::string _argv_basename(const char * name)
     {
         const std::string_view tmp(name);
         return menphina::path_basename(tmp);
+    }
+
+    std::string _get_config_file()
+    {
+        const std::string home = menphina::get_user_home_directory();
+        return menphina::path_join(home, CONFIG_NAME);
     }
 }
 
@@ -128,6 +134,9 @@ int main(int argc, char ** argv)
     // const int ret = exec->run();
     // delete exec;
     // return ret;
+
+    const std::string configFile = _get_config_file();
+    std::cout << "Loading configuration from " << configFile << std::endl;
 
     return 0;
 }
