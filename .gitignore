@@ -40,3 +40,6 @@
 
 # Other temp files
 *~
+
+# Build output
+/build
