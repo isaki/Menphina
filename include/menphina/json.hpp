@@ -15,6 +15,9 @@ namespace menphina
     };
 
     std::ostream& operator<<(std::ostream& os, const struct app_config_s& ac);
+
+    void read_json_file(struct app_config_s& obj, const std::string& jsonFile);
+    void write_json_file(const struct app_config_s& obj, const std::string& jsonFile);
 }
 
 #endif

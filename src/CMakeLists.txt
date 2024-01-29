@@ -3,8 +3,11 @@
 find_package(Boost 1.74.0 REQUIRED COMPONENTS program_options)
 
 add_executable(xiv-menphina
-    util.cpp
-    appconfig.cpp
+    platform.cpp
+    json.cpp
+    exec.cpp
+    exec_configured.cpp
+    exec_create_config.cpp
 
     # Main should be last
     main.cpp

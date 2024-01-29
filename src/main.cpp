@@ -7,9 +7,9 @@
 
 #include "boost/program_options.hpp"
 #include "menphina_internal/config.hpp"
-#include "menphina/appconfig.hpp"
-#include "menphina/util.hpp"
-#include "menphina/execution.hpp"
+
+#include "menphina/platform.hpp"
+#include "menphina/executions.hpp"
 
 namespace po = boost::program_options;
 
@@ -18,7 +18,7 @@ namespace
     const std::string MODE_CLEAN { "clean" };
     const std::string MODE_PACKAGE { "package" };
     const std::string MODE_DEPLOY { "deploy" };
-    const std::string MODE_AUTO_CONF { "auto-config"};
+    const std::string MODE_CREATE_CONF { "create-config"};
 
     const std::string CONFIG_NAME { ".menphina.json" };
 
@@ -37,7 +37,7 @@ namespace
 
 int main(int argc, char ** argv)
 {
-    //menphina::Execution * exec;
+    menphina::Execution * exec;
     try
     {    
         // Declare the supported options.
@@ -83,7 +83,7 @@ int main(int argc, char ** argv)
                 << "    deploys all configured (if present) mod data from a deployment package" << std::endl;
 
             std::cout << std::endl
-                << "  auto-config" << std::endl
+                << "  create-config" << std::endl
                 << "    attempts to locate the required files and directories to automatically" << std::endl
                 << "    create the " << CONFIG_NAME << " file" << std::endl;
 
@@ -110,18 +110,19 @@ int main(int argc, char ** argv)
             if (mode == MODE_CLEAN)
             {
                 // We would allocate clean object
+                exec = nullptr;
             }
             else if (mode == MODE_PACKAGE)
             {
-                // We would allocate package object
+                exec = nullptr;
             }
             else if (mode == MODE_DEPLOY)
             {
-                // We would allocate deployment object
+                exec = nullptr;
             }
-            else if (mode == MODE_AUTO_CONF)
+            else if (mode == MODE_CREATE_CONF)
             {
-                // We would allocate the auto-conf object
+                exec = new menphina::ExecCreateConfig();
             }
             else
             {
@@ -142,26 +143,13 @@ int main(int argc, char ** argv)
         return 1;
     }
 
-    // const int ret = exec->run();
-    // delete exec;
-    // return ret;
-
-    struct menphina::app_config_s appConfig;
-
-    try
+    // TODO: The null check isnt needed once all execs are built.
+    if (exec)
     {
-        const std::string configFile = _get_config_file();
-        std::cout << "Loading configuration from " << configFile << std::endl;
-
-        menphina::read_json_file<struct menphina::app_config_s>(appConfig, configFile);
+        const std::string appConfigFile = _get_config_file();
+        exec->run(appConfigFile);
+        delete exec;
     }
-    catch(const std::exception& e)
-    {
-        std::cerr << "Failed to load configuration: " << e.what() << std::endl;
-        return 2;
-    }
-
-    std::cout << "Menphina configuration:" << appConfig;
 
     return 0;
 }
