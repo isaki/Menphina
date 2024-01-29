@@ -128,7 +128,7 @@ int main(int argc, char ** argv)
     }
     catch(const std::exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << e.what() << std::endl;
         return 1;
     }
 
@@ -136,11 +136,20 @@ int main(int argc, char ** argv)
     // delete exec;
     // return ret;
 
-    const std::string configFile = _get_config_file();
-    std::cout << "Loading configuration from " << configFile << std::endl;
-
     struct menphina::app_config_s appConfig;
-    menphina::read_json_file<struct menphina::app_config_s>(appConfig, configFile);
+
+    try
+    {
+        const std::string configFile = _get_config_file();
+        std::cout << "Loading configuration from " << configFile << std::endl;
+
+        menphina::read_json_file<struct menphina::app_config_s>(appConfig, configFile);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "Failed to load configuration: " << e.what() << std::endl;
+        return 2;
+    }
 
     std::cout << "Menphina configuration:" << appConfig;
 
