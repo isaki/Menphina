@@ -43,8 +43,8 @@ int main(int argc, char ** argv)
         // Declare the supported options.
         po::options_description desc("Generic options");
         desc.add_options()
-            ("help", "print this message message")
-            ("version", "display version information")
+            ("help,h", "print this message message")
+            ("version,v", "display version information")
         ;
 
         po::options_description hidden("Hidden options");
