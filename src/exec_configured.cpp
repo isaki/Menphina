@@ -1,5 +1,6 @@
 /* Copyright 2024 isaki */
 
+#include <string>
 #include "menphina/json.hpp"
 #include "menphina/exec_configured.hpp"
 

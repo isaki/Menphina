@@ -4,12 +4,16 @@
 #include <string_view>
 #include <cstdlib>
 #include <filesystem>
+#include <exception>
 
 #if defined ( __linux__ )
+#include <unistd.h>
+#include <cerrno>
 #include <fstream>
 #endif
 
 #include "menphina/platform.hpp"
+#include "menphina/m_exception.hpp"
 
 namespace
 {
@@ -49,9 +53,20 @@ namespace
         return (str.find(WSL_VERSION_STRING) != std::string::npos) ? menphina::Platform::WSL : menphina::Platform::Linux;
     }
 
+    // std::string _get_win_env_r(const std::string& varname)
+    // {
+    //     int fd[2];
+    //     if (pipe(fd) != 0) {
+    //         const int err = errno;
+    //         throw menphina::ex::errno_exception("Unable to create pipe", err);
+    //     }
+
+    //     return varname;
+    // }
+
     std::string _get_wsl_home()
     {
-
+        return {};
     }
 #endif
 
@@ -70,7 +85,7 @@ namespace
 
         if (home == nullptr)
         {
-            return {};
+            throw menphina::str_exception("Unable to read env " + HOME_VAR_NAME);
         }
 
         std::string ret { home };

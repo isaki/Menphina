@@ -3,6 +3,7 @@
 find_package(Boost 1.74.0 REQUIRED COMPONENTS program_options)
 
 add_executable(xiv-menphina
+    m_exception.cpp
     platform.cpp
     json.cpp
     exec.cpp
