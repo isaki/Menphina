@@ -4,7 +4,6 @@
 #define __MENPHINA_EXECUTION_HPP__
 
 #include <string>
-#include <menphina/appconfig.hpp>
 
 namespace menphina
 {
@@ -13,7 +12,7 @@ namespace menphina
         public:
             virtual ~Execution() {}
 
-            virtual int run(const struct app_config_s& config) noexcept = 0;
+            virtual int run(const std::string& appConfigFile) noexcept = 0;
         protected:
             Execution() {}
     };

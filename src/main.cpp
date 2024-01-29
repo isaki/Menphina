@@ -18,6 +18,7 @@ namespace
     const std::string MODE_CLEAN { "clean" };
     const std::string MODE_PACKAGE { "package" };
     const std::string MODE_DEPLOY { "deploy" };
+    const std::string MODE_AUTO_CONF { "auto-config"};
 
     const std::string CONFIG_NAME { ".menphina.json" };
 
@@ -81,6 +82,11 @@ int main(int argc, char ** argv)
                 << "  deploy" << std::endl
                 << "    deploys all configured (if present) mod data from a deployment package" << std::endl;
 
+            std::cout << std::endl
+                << "  auto-config" << std::endl
+                << "    attempts to locate the required files and directories to automatically" << std::endl
+                << "    create the " << CONFIG_NAME << " file" << std::endl;
+
             std::cout << std::endl;
 
             return 1;
@@ -112,6 +118,10 @@ int main(int argc, char ** argv)
             else if (mode == MODE_DEPLOY)
             {
                 // We would allocate deployment object
+            }
+            else if (mode == MODE_AUTO_CONF)
+            {
+                // We would allocate the auto-conf object
             }
             else
             {
