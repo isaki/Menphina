@@ -119,6 +119,11 @@ namespace
             }
 
             FILE * devnull = fopen("/dev/null", "w");
+            if (!devnuill)
+            {
+                std::exit(errno);
+            }
+
             check = dup2(fileno(devnull), 2);
 
             if (check == -1)
