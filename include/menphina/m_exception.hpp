@@ -12,7 +12,7 @@ namespace menphina
     class errno_exception final : public std::exception
     {
         public:
-            errno_exception(const std::string_view& msg, const int err);
+            errno_exception(const std::string_view msg, const int err);
             ~errno_exception();
 
             const char* what() const throw() override;
@@ -21,16 +21,16 @@ namespace menphina
             std::string m_msg;
     };
 
-    class str_exception final : public std::exception
+    class file_open_exception final : public std::exception
     {
         public:
-            str_exception(const std::string_view& msg);
-            ~str_exception();
+            file_open_exception(const std::string_view filename, const bool isRead);
+            ~file_open_exception();
 
             const char* what() const throw() override;
 
         private:
-            const std::string m_msg;
+            std::string m_msg;
     };
 }
 

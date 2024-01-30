@@ -16,7 +16,7 @@ namespace menphina
         protected:
             ExecConfigured();
 
-            virtual void run(const struct app_config_s ac) = 0;
+            virtual void run(const app_config_t ac) = 0;
     };
 }
 

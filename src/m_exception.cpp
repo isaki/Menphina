@@ -7,7 +7,7 @@
 
 menphina::errno_exception::~errno_exception() {}
 
-menphina::errno_exception::errno_exception(const std::string_view& msg, const int err) : m_msg(msg)
+menphina::errno_exception::errno_exception(const std::string_view msg, const int err) : m_msg(msg)
 {
     const char * errstr = strerror(err);
     m_msg.append(" (")
@@ -22,12 +22,18 @@ const char * menphina::errno_exception::what() const throw()
     return m_msg.c_str();
 }
 
-/* str_exception */
-menphina::str_exception::~str_exception() {}
+/* file_open_excetion */
+menphina::file_open_exception::~file_open_exception() {}
 
-menphina::str_exception::str_exception(const std::string_view& msg) : m_msg(msg) {}
+menphina::file_open_exception::file_open_exception(const std::string_view file, const bool isRead)
+{
+    m_msg.append("failed to open file for ")
+        .append((isRead) ? "read" : "write")
+        .append(": ")
+        .append(file);
+}
 
-const char * menphina::str_exception::what() const throw()
+const char * menphina::file_open_exception::what() const throw()
 {
     return m_msg.c_str();
 }

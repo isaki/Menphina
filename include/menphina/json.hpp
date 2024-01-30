@@ -5,19 +5,56 @@
 
 #include <string>
 #include <ostream>
+#include <cstdint>
+#include "glaze/json/json_t.hpp"
 
+// Note the use of Pascal case is to match what Dalamud plugins typically use
+// so as to be familiar to the end user.
 namespace menphina
 {
-    struct app_config_s
+    // This is merely an abstraction.
+    using json_t = glz::json_t;
+
+    /* PENUMBRA */
+
+    struct penumbra_config_t
     {
-        std::string penumbraDir;
-        std::string xivLauncherConfigDir;
+        std::string ModDirectory;
+        std::string ExportDirectory;
     };
 
-    std::ostream& operator<<(std::ostream& os, const struct app_config_s& ac);
+    void read_json_file(penumbra_config_t& obj, const std::string& jsonFile);
 
-    void read_json_file(struct app_config_s& obj, const std::string& jsonFile);
-    void write_json_file(const struct app_config_s& obj, const std::string& jsonFile);
+    /* MARE SYNCHRONOS */
+
+    struct mare_config_t
+    {
+        std::string CacheFolder;
+    };
+
+    void read_json_file(mare_config_t& obj, const std::string& jsonFile);
+
+    /* MENPHINA */
+
+    struct app_config_t
+    {
+        /* Common JSON constructs with plugins */
+        penumbra_config_t Penumbra;
+        mare_config_t MareSynchronos;
+
+        /* Unique settings for this application */
+        struct
+        {
+            std::string ConfigDirectory;
+        } XIVLauncher;
+    };
+
+    void read_json_file(app_config_t& obj, const std::string& jsonFile);
+    void write_json_file(const app_config_t& obj, const std::string& jsonFile);
+
+    /* GENERIC ACCESS */
+    /* This is required to support not having to know every single field in every single json */
+
 }
 
 #endif

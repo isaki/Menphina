@@ -10,7 +10,7 @@ menphina::ExecConfigured::ExecConfigured() {}
 
 void menphina::ExecConfigured::run(const std::string& appConfigFile)
 {
-    struct menphina::app_config_s ac;
+    menphina::app_config_t ac;
     menphina::read_json_file(ac, appConfigFile);
     run(ac);
 }

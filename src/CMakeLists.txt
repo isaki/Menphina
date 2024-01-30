@@ -1,6 +1,7 @@
 # Copyright 2024 isaki
 
 find_package(Boost 1.74.0 REQUIRED COMPONENTS program_options)
+set(Boost_USE_STATIC_LIBS ON)
 
 add_executable(xiv-menphina
     m_exception.cpp

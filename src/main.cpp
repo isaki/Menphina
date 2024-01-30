@@ -9,7 +9,10 @@
 #include "menphina_internal/config.hpp"
 
 #include "menphina/platform.hpp"
-#include "menphina/execution.hpp"
+
+// Execution support
+#include "menphina/exec.hpp"
+#include "menphina/exec_create_config.hpp"
 
 namespace po = boost::program_options;
 

@@ -19,11 +19,10 @@ namespace menphina
 
     Platform get_current_platform();
 
-    std::string path_basename(const std::string_view& pathstr);
+    std::string path_basename(const std::string_view pathstr);
+    std::string path_join(const std::string_view a, const std::string_view b);
 
     const std::string & get_user_home_directory();
-
-    std::string path_join(const std::string& a, const std::string& b);
 }
 
 #endif
