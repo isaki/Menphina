@@ -21,6 +21,22 @@
 
 namespace
 {
+
+    // Dalamud/XIV on Mac/XIVLauncher Default Path
+#if defined ( _WIN32 )
+    const std::string LAUNCHER_PATH = "AppData\\Roaming\\XIVLauncher";
+#elif defined ( __APPLE__ )
+    const std::string LAUNCHER_PATH = "Library/Application Support/XIV on Mac";
+#elif defined ( __linux__ )
+    const std::string WSL_LAUNCHER_PATH = "AppData/Roaming/XIVLauncher";
+    const std::string LINUX_LAUNCHER_PATH = ".xlcore";
+#else
+#error "Unsupported platform; no launcher path defined."
+#endif
+
+    // Sub directory for plugins.
+    //const std::string PLUGIN_CONFIG_DIR_NAME = "pluginConfigs";
+
 #if defined ( _WIN32 )
     // While this is not targetting Windows for the first release, windows suppose is planned.
     const std::string HOME_VAR_NAME { "USERPROFILE" };
@@ -203,6 +219,12 @@ namespace
         return ret;
     }
 
+    const std::string & _get_linux_launcher_dir()
+    {
+        const menphina::Platform p = menphina::get_current_platform();
+        return (p == menphina::Platform::WSL) ? WSL_LAUNCHER_PATH : LINUX_LAUNCHER_PATH;
+    }
+
 #endif
 
     std::string _get_home()
@@ -259,4 +281,20 @@ std::string menphina::path_join(const std::string_view a, const std::string_view
     std::filesystem::path ret(a);
     ret /= b;
     return ret;
+}
+
+bool menphina::path_exists(const std::string_view path)
+{
+    const std::filesystem::path fsp(path);
+    return std::filesystem::exists(path);
+}
+
+const std::string & get_relative_launcher_config_dir()
+{
+#if defined ( __linux__ )
+    static const std::string & launcherDir = _get_linux_launcher_dir();
+    return launcherDir;
+#else
+    return LAUNCHER_PATH;
+#endif
 }

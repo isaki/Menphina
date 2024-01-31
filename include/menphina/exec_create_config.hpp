@@ -14,7 +14,6 @@ namespace menphina
             ExecCreateConfig();
 
             void run(const std::string& appConfigFile) override;
-
     };
 }
 

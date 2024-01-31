@@ -12,9 +12,6 @@
 // so as to be familiar to the end user.
 namespace menphina
 {
-    // This is merely an abstraction.
-    using json_t = glz::json_t;
-
     /* PENUMBRA */
 
     struct penumbra_config_t
@@ -46,7 +43,7 @@ namespace menphina
         struct
         {
             std::string ConfigDirectory;
-        } XIVLauncher;
+        } Launcher;
     };
 
     void read_json_file(app_config_t& obj, const std::string& jsonFile);
@@ -54,7 +51,7 @@ namespace menphina
 
     /* GENERIC ACCESS */
     /* This is required to support not having to know every single field in every single json */
-
+    
 }
 
 #endif
