@@ -119,7 +119,7 @@ namespace
             }
 
             FILE * devnull = fopen("/dev/null", "w");
-            if (!devnuill)
+            if (!devnull)
             {
                 std::exit(errno);
             }
