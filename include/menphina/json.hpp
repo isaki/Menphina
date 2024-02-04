@@ -17,41 +17,15 @@ namespace menphina
     struct penumbra_config_t
     {
         std::string ModDirectory;
-        std::string ExportDirectory;
     };
 
     void read_json_file(penumbra_config_t& obj, const std::string& jsonFile);
 
-    /* MARE SYNCHRONOS */
-
-    struct mare_config_t
-    {
-        std::string CacheFolder;
-    };
-
-    void read_json_file(mare_config_t& obj, const std::string& jsonFile);
-
-    /* MENPHINA */
-
-    struct app_config_t
-    {
-        /* Common JSON constructs with plugins */
-        penumbra_config_t Penumbra;
-        mare_config_t MareSynchronos;
-
-        /* Unique settings for this application */
-        struct
-        {
-            std::string ConfigDirectory;
-        } Launcher;
-    };
-
-    void read_json_file(app_config_t& obj, const std::string& jsonFile);
-    void write_json_file(const app_config_t& obj, const std::string& jsonFile);
 
     /* GENERIC ACCESS */
-    /* This is required to support not having to know every single field in every single json */
-    
+    /* This is required to support not having to know every single field in every single json */ 
+    void read_generic_json_file(glz::json_t& obj, const std::string& jsonFile);
+    void write_generic_json_file(const glz::json_t& obj, const std::string& jsonFile);
 }
 
 #endif

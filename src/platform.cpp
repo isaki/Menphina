@@ -14,6 +14,7 @@
 #include <cstring>
 #include <sys/wait.h>
 #include <memory>
+#include <cctype>
 #endif
 
 #include "menphina/m_exception.hpp"
@@ -50,8 +51,16 @@ namespace
 
     const std::string WSL_HOME_VAR_NAME { "USERPROFILE" };
 
-    // ... 32,767... for an environment variable...
-    inline constexpr size_t WIN_ENV_LENGTH = 32767;
+    const std::string WSL_WIN_PATH_START { "/mnt" };
+    const size_t WSL_PATH_START_MIN_LENGTH = WSL_WIN_PATH_START.size() + 2;
+
+    inline constexpr char WINDOWS_PATH_DELIM = '\\';
+    inline constexpr char GENERIC_PATH_DELIM = '/';
+
+    // ... 32,767... for an environment variable... + 2 for CRLF.
+    inline constexpr size_t WIN_LINE_END_LENGTH = 2;
+    inline constexpr size_t WIN_ENV_DATA_LENGTH = 32767;
+    inline constexpr size_t WIN_ENV_READ_BUFFER_LENGTH = WIN_ENV_DATA_LENGTH + WIN_LINE_END_LENGTH;
     
     // C++ likes RAII
     class IOPipe final
@@ -168,14 +177,16 @@ namespace
         // We might as well do this on the heap, 32k on the stack seems... not great.
         // We use unique_ptr so we don't have to think about delete/free in the
         // various places this function can exit, via exception or success.
-        auto buffer = std::unique_ptr<char[]>(new char[WIN_ENV_LENGTH]());
+
+        // We don't need to allocate the null, we are forcing it to truncate.
+        auto buffer = std::unique_ptr<char[]>(new char[WIN_ENV_READ_BUFFER_LENGTH]);
         char * ptr = buffer.get();
         size_t total_read = 0;
         size_t last_read = 0;
 
         do
         {
-            last_read = read(fd, ptr, WIN_ENV_LENGTH - total_read);
+            last_read = read(fd, ptr, WIN_ENV_READ_BUFFER_LENGTH - total_read);
 
             if (last_read == 0)
             {
@@ -184,7 +195,7 @@ namespace
 
             total_read += last_read;
             ptr += last_read;
-        } while (total_read < WIN_ENV_LENGTH);
+        } while (total_read < WIN_ENV_READ_BUFFER_LENGTH);
 
         // This shouldn't happen unless our assumptions break, which, with WSL, you never know.
         if (last_read != 0)
@@ -192,14 +203,14 @@ namespace
             // Drain down the buffer
             do
             {
-                last_read = read(fd, buffer.get(), WIN_ENV_LENGTH);
+                last_read = read(fd, buffer.get(), WIN_ENV_READ_BUFFER_LENGTH);
             } while (last_read != 0);
             
 
             throw std::runtime_error("Windows enviornment variable "
                 + v
                 + " has value that exceeds documented buffer lengh "
-                + std::to_string(WIN_ENV_LENGTH));
+                + std::to_string(WIN_ENV_READ_BUFFER_LENGTH));
         }
 
         int child_status;
@@ -215,7 +226,12 @@ namespace
             throw std::runtime_error("Execution of cmd.exe has failed");
         }
 
-        std::string ret(buffer.get(), total_read);
+        if (total_read < WIN_LINE_END_LENGTH)
+        {
+            throw std::runtime_error("Execution of cmd.exe has provided too little data");
+        }
+
+        std::string ret(buffer.get(), total_read - WIN_LINE_END_LENGTH);
         return ret;
     }
 
@@ -223,6 +239,80 @@ namespace
     {
         const menphina::Platform p = menphina::get_current_platform();
         return (p == menphina::Platform::WSL) ? WSL_LAUNCHER_PATH : LINUX_LAUNCHER_PATH;
+    }
+
+    std::string _to_windows_path(const std::string& wslPath)
+    {
+        if (wslPath.size() < WSL_PATH_START_MIN_LENGTH) [[unlikely]]
+        {
+            throw std::runtime_error("WSL path '" + wslPath + "' too short");
+        }
+
+        if (wslPath.find_first_of(WSL_WIN_PATH_START, 0) != 0) [[unlikely]]
+        {
+            throw std::runtime_error("Invalid WSL path " + wslPath);
+        }
+
+        const char driveLetter = wslPath[WSL_PATH_START_MIN_LENGTH - 1];
+        if (!std::isalpha(driveLetter) || (wslPath.size() != WSL_PATH_START_MIN_LENGTH && wslPath[WSL_PATH_START_MIN_LENGTH] != GENERIC_PATH_DELIM)) [[unlikely]]
+        {
+            throw std::runtime_error("Invalid WSL path " + wslPath);
+        }
+
+        // Now, we convert to Windows.
+        std::string ret;
+
+        // We need to fit the string.
+        // /mnt/c
+        // becomes:
+        // C: BACKSLASH
+        ret.reserve(wslPath.size() - WSL_WIN_PATH_START.size() + 1);
+        ret += std::toupper(driveLetter);
+        ret += ':';
+
+        for (auto ptr = wslPath.cbegin() + WSL_PATH_START_MIN_LENGTH; ptr != wslPath.cend(); ++ptr)
+        {
+            ret += (*ptr != GENERIC_PATH_DELIM) ? *ptr : WINDOWS_PATH_DELIM;
+        }
+    }
+
+    std::string _to_wsl_path(const std::string& winPath)
+    {
+        // We have to determine the drive letter, and swap the things.
+        // while we coud just copy and replace, we will do this the hardway.
+
+        // First, is this even worth doing.
+        // C: is 2 characters, for example
+        if (winPath.size() < 3) [[unlikely]]
+        {
+            throw std::runtime_error("Windows path '" + winPath + "' too short");
+        }
+
+        const char first = winPath.at(0);
+        if (!std::isalpha(first) || winPath.at(1) != ':') [[unlikely]]
+        {
+            throw std::runtime_error("Invalid Windows path " + winPath);
+        }
+
+        std::string ret;
+
+        // We need to fit the string.
+        // C:
+        // becomes:
+        // /mnt + /x
+        // And add 1 just to make sure we can fit a null since the docs unclear.
+        ret.reserve(WSL_WIN_PATH_START.size() + winPath.size() + 1);
+
+        ret.append(WSL_WIN_PATH_START);
+        ret += GENERIC_PATH_DELIM;
+        ret += std::tolower(first);
+        
+        for (auto ptr = winPath.cbegin() + 2; ptr != winPath.cend(); ++ptr)
+        {
+            ret += (*ptr != WINDOWS_PATH_DELIM) ? *ptr : GENERIC_PATH_DELIM;
+        }
+
+        return ret;
     }
 
 #endif

@@ -30,8 +30,6 @@ namespace menphina
     bool path_exists(const std::string_view path);
 
     const std::string & get_user_home_directory();
-
-    const std::string & get_relative_launcher_config_dir();
 }
 
 #endif

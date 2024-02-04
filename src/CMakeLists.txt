@@ -8,8 +8,6 @@ add_executable(xiv-menphina
     platform.cpp
     json.cpp
     exec.cpp
-    exec_configured.cpp
-    exec_create_config.cpp
 
     # Main should be last
     main.cpp

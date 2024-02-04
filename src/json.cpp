@@ -50,9 +50,8 @@ namespace
         .error_on_const_read = true
     };
 
-    inline constexpr glz::opts MENPHINA_STRUCT_READ_SETTINGS = {
-        .error_on_unknown_keys = true,
-        .error_on_missing_keys = true,
+    inline constexpr glz::opts GENERIC_READ_SETTINGS = {
+        .error_on_unknown_keys = false,
         .error_on_const_read = true
     };
 
@@ -94,17 +93,12 @@ void menphina::read_json_file(penumbra_config_t& obj, const std::string& jsonFil
     _read_json_file<PLUGIN_STRUCT_READ_SETTINGS, penumbra_config_t>(obj, jsonFile);
 }
 
-void menphina::read_json_file(mare_config_t& obj, const std::string& jsonFile)
+void menphina::read_generic_json_file(glz::json_t& obj, const std::string& jsonFile)
 {
-    _read_json_file<PLUGIN_STRUCT_READ_SETTINGS, mare_config_t>(obj, jsonFile);
+    _read_json_file<GENERIC_READ_SETTINGS>(obj, jsonFile);
 }
 
-void menphina::read_json_file(app_config_t& obj, const std::string& jsonFile)
+void menphina::write_generic_json_file(const glz::json_t& obj, const std::string& jsonFile)
 {
-    _read_json_file<MENPHINA_STRUCT_READ_SETTINGS, app_config_t>(obj, jsonFile);
-}
-
-void menphina::write_json_file(const app_config_t& obj, const std::string& jsonFile)
-{
-    _write_json_file<JSON_WRITE_SETTINGS, const app_config_t&>(obj, jsonFile);
+    _write_json_file<JSON_WRITE_SETTINGS>(obj, jsonFile);
 }

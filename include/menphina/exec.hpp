@@ -12,7 +12,7 @@ namespace menphina
         public:
             virtual ~Execution();
 
-            virtual void run(const std::string& appConfigFile) = 0;
+            virtual void run(const std::string& launcherDir) = 0;
         protected:
             Execution();
     };

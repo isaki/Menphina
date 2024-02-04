@@ -12,7 +12,10 @@
 
 // Execution support
 #include "menphina/exec.hpp"
-#include "menphina/exec_create_config.hpp"
+
+// TODO: REMOVE LATER
+#include "menphina/json.hpp"
+#include "glaze/json/json_t.hpp"
 
 namespace po = boost::program_options;
 
@@ -48,6 +51,7 @@ int main(int argc, char ** argv)
         desc.add_options()
             ("help,h", "print this message message")
             ("version,v", "display version information")
+            ("launcher-dir", po::value<std::string>(), "provide an explicit launcher directory instead of the default")
         ;
 
         po::options_description hidden("Hidden options");
@@ -123,10 +127,6 @@ int main(int argc, char ** argv)
             {
                 exec = nullptr;
             }
-            else if (mode == MODE_CREATE_CONF)
-            {
-                exec = new menphina::ExecCreateConfig();
-            }
             else
             {
                 // Input error
@@ -153,6 +153,14 @@ int main(int argc, char ** argv)
         exec->run(appConfigFile);
         delete exec;
     }
+
+    glz::json_t x {};
+    const std::string appConfigFile = _get_config_file();
+    std::cout << "Attempting to load " << appConfigFile << std::endl;
+    menphina::read_generic_json_file(x, appConfigFile);
+
+    std::cout << x << std::endl;
+
 
     return 0;
 }
