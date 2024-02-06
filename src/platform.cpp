@@ -241,6 +241,8 @@ namespace
         return (p == menphina::Platform::WSL) ? WSL_LAUNCHER_PATH : LINUX_LAUNCHER_PATH;
     }
 
+    // TODO remove attribute
+    [[maybe_unused]]
     std::string _to_windows_path(const std::string& wslPath)
     {
         if (wslPath.size() < WSL_PATH_START_MIN_LENGTH) [[unlikely]]
@@ -276,6 +278,8 @@ namespace
         }
     }
 
+    // TODO remove attribute
+    [[maybe_unused]]
     std::string _to_wsl_path(const std::string& winPath)
     {
         // We have to determine the drive letter, and swap the things.
