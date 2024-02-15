@@ -69,6 +69,18 @@ int main(int argc, char ** argv)
         po::store(po::command_line_parser(argc, argv).options(all).positional(posdesc).run(), vm);
         po::notify(vm);
 
+        if (vm.count("version"))
+        {
+            const std::string name = _argv_basename(argv[0]);
+            std::cout << name
+                << " v"
+                << menphina::cmake::project_version
+                << std::endl;
+
+            return 0;
+        }
+
+
         if (vm.count("help")) {
             const std::string name = _argv_basename(argv[0]);
             std::cout << name << " <mode> " << std::endl << std::endl;
@@ -97,17 +109,6 @@ int main(int argc, char ** argv)
             std::cout << std::endl;
 
             return 1;
-        }
-
-        if (vm.count("version"))
-        {
-            const std::string name = _argv_basename(argv[0]);
-            std::cout << name
-                << " v"
-                << menphina::cmake::project_version
-                << std::endl;
-
-            return 0;
         }
 
         if (vm.count("mode"))
