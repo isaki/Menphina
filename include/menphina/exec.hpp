@@ -3,7 +3,7 @@
 #ifndef __MENPHINA_EXEC_HPP__
 #define __MENPHINA_EXEC_HPP__
 
-#include <string>
+#include <string_view>
 
 namespace menphina
 {
@@ -12,7 +12,7 @@ namespace menphina
         public:
             virtual ~Execution();
 
-            virtual void run(const std::string& launcherDir) = 0;
+            virtual void run(const std::string_view& launcherDir) = 0;
         protected:
             Execution();
     };

@@ -80,7 +80,6 @@ int main(int argc, char ** argv)
             return 0;
         }
 
-
         if (vm.count("help")) {
             const std::string name = _argv_basename(argv[0]);
             std::cout << name << " <mode> " << std::endl << std::endl;
@@ -159,9 +158,6 @@ int main(int argc, char ** argv)
     const std::string appConfigFile = _get_config_file();
     std::cout << "Attempting to load " << appConfigFile << std::endl;
     menphina::read_generic_json_file(x, appConfigFile);
-
-    std::cout << x << std::endl;
-
 
     return 0;
 }
