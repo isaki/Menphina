@@ -209,8 +209,8 @@ namespace
 
             throw std::runtime_error("Windows enviornment variable "
                 + v
-                + " has value that exceeds documented buffer lengh "
-                + std::to_string(WIN_ENV_READ_BUFFER_LENGTH));
+                + " has value that exceeds documented data lengh "
+                + std::to_string(WIN_ENV_DATA_LENGTH));
         }
 
         int child_status;
