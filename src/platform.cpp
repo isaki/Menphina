@@ -94,15 +94,18 @@ namespace
             }
     
         private:
+            // Pipes require an array of size 2.
+            int m_fd[2];
+
             void closeIndex(const size_t i) {
                 if (m_fd[i] != -1)
                 {
+                    // This should generally not fail outside of signals for a
+                    // pipe, in which case, there isn't much for us to do anyway.
                     close(m_fd[i]);
                     m_fd[i] = -1;
                 }
             }
-
-            int m_fd[2];
     };
 
     menphina::Platform _get_linux_platform()
